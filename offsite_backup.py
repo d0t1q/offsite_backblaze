@@ -78,19 +78,24 @@ def file_exists_in_bucket(file_name, sha1_hash):
             return True
     return False
 
-
 def upload_to_backblaze(directory, folders_to_ignore):
-    try:
-        for root, _, files in os.walk(directory):
-            # Check if the current directory or any of its parent directories should be ignored
-            if any(os.path.commonprefix([root, ignore_pattern]) == ignore_pattern for ignore_pattern in folders_to_ignore):
-                logger.info(f"Ignoring directory: {root}")
+    for root, _, files in os.walk(directory):
+        # Check if the directory or any of its parent directories should be ignored
+        if any(root.startswith(ignore_pattern.rstrip('/')) for ignore_pattern in folders_to_ignore):
+            logger.info(f"Ignoring directory: {root}")
+            continue
+
+        for file in files:
+            file_path = os.path.join(root, file)
+            # Check if the file should be ignored
+            if any(fnmatch.fnmatch(file_path, ignore_pattern.rstrip('/')) for ignore_pattern in folders_to_ignore):
+                logger.info(f"Ignoring file: {file_path}")
                 continue
-            for file in files:
-                file_path = os.path.join(root, file)
-                upload_file(file_path, directory)  # Pass the base directory as the second argument
-    except Exception as e:
-        logger.exception(f"Error occurred while processing directory {directory}: {e}")
+
+            try:
+                upload_file(file_path, directory)
+            except Exception as e:
+                logger.error(f"Error occurred while processing file {file_path}: {e}")
 
 
 def upload_file(file_path, base_directory):
@@ -182,4 +187,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
