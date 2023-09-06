@@ -1,7 +1,7 @@
 {
     "credentials": {
         "keyID": "YOUR_KEY_ID",
-        "keyName": "YOUR_KEY_NAME",
+        "bucketName": "bucketName",
         "applicationKey": "YOUR_APPLICATION_KEY"
     },
     "folders_to_backup": ["./backup/", "./data/"],
