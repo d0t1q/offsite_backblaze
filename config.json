@@ -1,1 +1,11 @@
-
+{
+    "credentials": {
+        "keyID": "YOUR_KEY_ID",
+        "keyName": "YOUR_KEY_NAME",
+        "applicationKey": "YOUR_APPLICATION_KEY"
+    },
+    "folders_to_backup": ["./backup/", "./data/"],
+    "folders_to_ignore": ["./backup/temp/"],
+    "log_output_file": "./backup_log.txt",
+    "log_output_level": "info"
+}
